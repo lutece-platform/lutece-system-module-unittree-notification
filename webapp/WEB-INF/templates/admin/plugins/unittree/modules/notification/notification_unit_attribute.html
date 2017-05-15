@@ -1,0 +1,11 @@
+	<p>
+		<strong>#i18n{module.unittree.notification.modify.unit.notif.title}</strong>
+	</p>
+	<#assign notif=unit.getAttribute('unittree-notification.notificationUnitAttribute').getAttribute()>
+	<p>
+		<span>idUnit : ${notif.idUnit}</span><br/>
+		<span>email : ${notif.email}</span><br/>
+		<span>hasNotif : ${notif.hasNotif?c}</span><br/>
+		<span>useEmail : ${notif.useEmail?c}</span><br/>
+		<span>useList : ${notif.useList?c}</span><br/>
+	</p>
