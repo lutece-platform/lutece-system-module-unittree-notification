@@ -41,18 +41,19 @@ import fr.paris.lutece.util.sql.DAOUtil;
  */
 public class NotificationDAO implements INotificationDAO
 {
-	private final String SQL_SELECT_BY_UNIT = "SELECT id_unit, email, has_notif, use_email, use_list FROM unittree_unit_notification WHERE id_unit = ?";
-	private final String SQL_DELETE_BY_UNIT = "DELETE FROM unittree_unit_notification WHERE id_unit = ?";
-	//WARNING, UPDATE and INSERT HAVE TO have the same parameter order
-	private final String SQL_UPDATE_NOTIFICATION = "UPDATE unittree_unit_notification SET email = ?, has_notif = ?, use_email = ?, use_list = ? WHERE id_unit = ?";
-	private final String SQL_INSERT_NOTIFICATION = "INSERT INTO unittree_unit_notification ( email, has_notif, use_email, use_list, id_unit ) VALUES ( ?, ?, ?, ?, ? )";
-	/**
-	 * {@inheritDoc}
-	 */
+    private final String SQL_SELECT_BY_UNIT = "SELECT id_unit, email, has_notif, use_email, use_list FROM unittree_unit_notification WHERE id_unit = ?";
+    private final String SQL_DELETE_BY_UNIT = "DELETE FROM unittree_unit_notification WHERE id_unit = ?";
+    // WARNING, UPDATE and INSERT HAVE TO have the same parameter order
+    private final String SQL_UPDATE_NOTIFICATION = "UPDATE unittree_unit_notification SET email = ?, has_notif = ?, use_email = ?, use_list = ? WHERE id_unit = ?";
+    private final String SQL_INSERT_NOTIFICATION = "INSERT INTO unittree_unit_notification ( email, has_notif, use_email, use_list, id_unit ) VALUES ( ?, ?, ?, ?, ? )";
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Notification loadByIdUnit( int nIdUnit, Plugin plugin )
     {
-    	Notification notification = null;
+        Notification notification = null;
 
         DAOUtil daoUtil = new DAOUtil( SQL_SELECT_BY_UNIT, plugin );
         daoUtil.setInt( 1, nIdUnit );
@@ -75,50 +76,48 @@ public class NotificationDAO implements INotificationDAO
         return notification;
     }
 
-	/**
-	 * {@inheritDoc}
-	 */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void removeForUnit( int nIdUnit, Plugin plugin )
     {
-    	DAOUtil daoUtil = new DAOUtil( SQL_DELETE_BY_UNIT, plugin );
+        DAOUtil daoUtil = new DAOUtil( SQL_DELETE_BY_UNIT, plugin );
         daoUtil.setInt( 1, nIdUnit );
         daoUtil.executeUpdate( );
         daoUtil.free( );
     }
 
-	/**
-	 * {@inheritDoc}
-	 */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void mergeConfiguration( Notification notification, Plugin plugin )
     {
-	    if( notification!=null )
-	    {
-	    	DAOUtil daoUtil;
-	    	if( loadByIdUnit( notification.getIdUnit( ), plugin ) != null )
-	    	{
-	    		//UPDATE
-	    		daoUtil = new DAOUtil( SQL_UPDATE_NOTIFICATION, plugin );
-	    	}
-	    	else
-	    	{
-	    		//INSERT
-	    		daoUtil = new DAOUtil( SQL_INSERT_NOTIFICATION, plugin );
-	    	}
-	    	
-	    	int nIndex = 1;
-	    	daoUtil.setString( nIndex++, notification.getEmail( ) );
-	    	daoUtil.setBoolean( nIndex++, notification.getHasNotif( ) );
-	    	daoUtil.setBoolean( nIndex++, notification.getUseEmail( ) );
-	    	daoUtil.setBoolean( nIndex++, notification.getUseList( ) );
-	    	daoUtil.setInt( nIndex++, notification.getIdUnit( ) );
-	    	
-	        daoUtil.executeUpdate( );
-	        daoUtil.free( );
-	    }	    
+        if ( notification != null )
+        {
+            DAOUtil daoUtil;
+            if ( loadByIdUnit( notification.getIdUnit( ), plugin ) != null )
+            {
+                // UPDATE
+                daoUtil = new DAOUtil( SQL_UPDATE_NOTIFICATION, plugin );
+            }
+            else
+            {
+                // INSERT
+                daoUtil = new DAOUtil( SQL_INSERT_NOTIFICATION, plugin );
+            }
+
+            int nIndex = 1;
+            daoUtil.setString( nIndex++, notification.getEmail( ) );
+            daoUtil.setBoolean( nIndex++, notification.getHasNotif( ) );
+            daoUtil.setBoolean( nIndex++, notification.getUseEmail( ) );
+            daoUtil.setBoolean( nIndex++, notification.getUseList( ) );
+            daoUtil.setInt( nIndex++, notification.getIdUnit( ) );
+
+            daoUtil.executeUpdate( );
+            daoUtil.free( );
+        }
     }
 
-	
-	
 }

@@ -52,44 +52,49 @@ public final class NotificationHome
      */
     private NotificationHome( )
     {
-    }   
+    }
 
+    /**
+     * retrieve Notification configuration for a given unit
+     * 
+     * @param unit
+     *            the unit
+     * @return {@link Notification} the Notification configuration
+     */
+    public static Notification loadByUnit( Unit unit )
+    {
+        if ( unit != null )
+        {
+            return _dao.loadByIdUnit( unit.getIdUnit( ), _plugin );
+        }
+        else
+        {
+            return null;
+        }
+    }
 
-	/**
-	 * retrieve Notification configuration for a given unit
-	 * @param unit the unit
-	 * @return {@link Notification} the Notification configuration
-	 */
-	public static Notification loadByUnit( Unit unit )
-	{
-		if( unit != null )
-		{
-			return _dao.loadByIdUnit( unit.getIdUnit( ), _plugin );
-		}
-		else
-		{
-			return null;
-		}
-	}
-	
-	/**
-	 * remove Notification configuration for a given unit
-	 * @param nIdUnit id of the unit
-	 */
-	public static void removeForUnit( int nIdUnit )
-	{
-		_dao.removeForUnit( nIdUnit, _plugin );
-	}
-	
-	/**
-	 * update or create a notification configuration
-	 * @param notification the notification confifuration
-	 */
-	public static void mergeConfiguration( Notification notification )
-	{
-		if( notification != null )
-		{
-			_dao.mergeConfiguration( notification, _plugin );
-		}
-	}
+    /**
+     * remove Notification configuration for a given unit
+     * 
+     * @param nIdUnit
+     *            id of the unit
+     */
+    public static void removeForUnit( int nIdUnit )
+    {
+        _dao.removeForUnit( nIdUnit, _plugin );
+    }
+
+    /**
+     * update or create a notification configuration
+     * 
+     * @param notification
+     *            the notification confifuration
+     */
+    public static void mergeConfiguration( Notification notification )
+    {
+        if ( notification != null )
+        {
+            _dao.mergeConfiguration( notification, _plugin );
+        }
+    }
 }

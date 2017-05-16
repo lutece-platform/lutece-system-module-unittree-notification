@@ -40,5 +40,5 @@ import fr.paris.lutece.portal.service.plugin.PluginDefaultImplementation;
  */
 public class UnitTreeNotificationPlugin extends PluginDefaultImplementation
 {
-	public static final String PLUGIN_NAME = "unittree-notification";
+    public static final String PLUGIN_NAME = "unittree-notification";
 }

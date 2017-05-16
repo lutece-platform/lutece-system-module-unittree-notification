@@ -40,15 +40,15 @@ import fr.paris.lutece.plugins.unittree.business.unit.AbstractUnitAttribute;
  */
 public class NotificationUnitAttribute extends AbstractUnitAttribute<Notification>
 {
-	public static final String ATTRIBUTE_NAME = "unittree-notification.notificationUnitAttribute";
-	
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public String getAttributeName( )
-	{
-		return ATTRIBUTE_NAME;
-	}
+    public static final String ATTRIBUTE_NAME = "unittree-notification.notificationUnitAttribute";
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getAttributeName( )
+    {
+        return ATTRIBUTE_NAME;
+    }
 
 }

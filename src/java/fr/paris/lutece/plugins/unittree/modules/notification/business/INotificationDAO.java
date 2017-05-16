@@ -40,27 +40,36 @@ import fr.paris.lutece.portal.service.plugin.Plugin;
  */
 public interface INotificationDAO
 {
-	final String BEAN_NAME = "unittree-notification.notificationDAO";
+    final String BEAN_NAME = "unittree-notification.notificationDAO";
 
-	/**
-	 * retrieve Notification configuration for a given unit
-	 * @param nIdUnit id of the unit
-	 * @param plugin the plugin
-	 * @return {@link Notification} the Notification configuration
-	 */
-	Notification loadByIdUnit( int nIdUnit, Plugin plugin );
-	
-	/**
-	 * remove Notification configuration for a given unit
-	 * @param nIdUnit id of the unit
-	 * @param plugin the plugin
-	 */
-	void removeForUnit( int nIdUnit, Plugin plugin );
-	
-	/**
-	 * update or create a notification configuration
-	 * @param notification the notification confifuration
-	 * @param plugin the plugin
-	 */
-	void mergeConfiguration( Notification notification, Plugin plugin );
+    /**
+     * retrieve Notification configuration for a given unit
+     * 
+     * @param nIdUnit
+     *            id of the unit
+     * @param plugin
+     *            the plugin
+     * @return {@link Notification} the Notification configuration
+     */
+    Notification loadByIdUnit( int nIdUnit, Plugin plugin );
+
+    /**
+     * remove Notification configuration for a given unit
+     * 
+     * @param nIdUnit
+     *            id of the unit
+     * @param plugin
+     *            the plugin
+     */
+    void removeForUnit( int nIdUnit, Plugin plugin );
+
+    /**
+     * update or create a notification configuration
+     * 
+     * @param notification
+     *            the notification confifuration
+     * @param plugin
+     *            the plugin
+     */
+    void mergeConfiguration( Notification notification, Plugin plugin );
 }

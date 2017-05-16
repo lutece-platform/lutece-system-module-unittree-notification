@@ -45,45 +45,45 @@ import fr.paris.lutece.portal.business.user.AdminUser;
  */
 public class NotificationUnitAttributreComponent implements IUnitAttributeComponent
 {
-	private static final String NAME = "Unit notification";
-    
-	// TEMPLATES
-	private static final String TEMPLATE_ATTRIBUTE_COMPONENT = "modules/notification/notification_unit_attribute.html";
+    private static final String NAME = "Unit notification";
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void fillModel( HttpServletRequest request, AdminUser user, Map<String, Object> model )
-	{
-		//NOTHING TO DO, the model already have the unit with NotificationUnitAttribute
-	}
+    // TEMPLATES
+    private static final String TEMPLATE_ATTRIBUTE_COMPONENT = "modules/notification/notification_unit_attribute.html";
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public String getTemplate( )
-	{
-		return TEMPLATE_ATTRIBUTE_COMPONENT;
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void fillModel( HttpServletRequest request, AdminUser user, Map<String, Object> model )
+    {
+        // NOTHING TO DO, the model already have the unit with NotificationUnitAttribute
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public String getName( )
-	{
-		return NAME;
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getTemplate( )
+    {
+        return TEMPLATE_ATTRIBUTE_COMPONENT;
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public boolean isDisplayedInUnitForm( )
-	{
-		return true;
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getName( )
+    {
+        return NAME;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isDisplayedInUnitForm( )
+    {
+        return true;
+    }
 
 }

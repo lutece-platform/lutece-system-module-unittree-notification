@@ -35,6 +35,9 @@ package fr.paris.lutece.plugins.unittree.modules.notification.service;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang.StringUtils;
+import org.apache.commons.validator.routines.EmailValidator;
+
 import fr.paris.lutece.plugins.unittree.business.unit.Unit;
 import fr.paris.lutece.plugins.unittree.modules.notification.business.Notification;
 import fr.paris.lutece.plugins.unittree.modules.notification.business.NotificationHome;
@@ -46,83 +49,133 @@ import fr.paris.lutece.plugins.unittree.service.UnitErrorException;
  */
 public class NotificationService implements INotificationService
 {
+    // Markers
+    public static final String MARK_UNIT_NOTIF = "unit_notif";
+    public static final String MARK_UNIT_EMAIL = "unit_email";
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void doCreateUnit( Unit unit, HttpServletRequest request )
-	{
-		//NOTHING TO DO, default notification is nothing
-	}
+    // Constant
+    private static final String NOTIF_NO = "no";
+    private static final String NOTIF_EMAIL = "email";
+    private static final String NOTIF_LIST = "list";
+    private static final String NOTIF_BOTH = "both";
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void doModifyUnit( Unit unit, HttpServletRequest request )
-	{
-		//the unit in parameter HAS BEEN populate by the request before this call
-		//TODO
-	}
+    // Message
+    private static final String MESSAGE_ERROR_EMAIL_MANDATORY = "module.unittree.notification.message.error.email.mandatory";
+    private static final String MESSAGE_ERROR_EMAIL_FORMAT = "module.unittree.notification.message.error.email.format";
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void doRemoveUnit( int nIdUnit, HttpServletRequest request )
-	{
-		NotificationHome.removeForUnit( nIdUnit );
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void doCreateUnit( Unit unit, HttpServletRequest request )
+    {
+        // the unit in paramater HAS BEEN populate by the request before this call
+        // but the id of the unit is not set in the UnitAttribute because the unit wasn't created at the populate call.
+        if ( unit.getAttribute( NotificationUnitAttribute.ATTRIBUTE_NAME ) != null )
+        {
+            Notification notif = (Notification) unit.getAttribute( NotificationUnitAttribute.ATTRIBUTE_NAME ).getAttribute( );
+            notif.setIdUnit( unit.getIdUnit( ) );
+            NotificationHome.mergeConfiguration( notif );
+        }
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void populate( Unit unit )
-	{
-		if( unit == null )
-		{
-			return;
-		}
-		
-		NotificationUnitAttribute notifUnitAtt = new NotificationUnitAttribute( );
-		Notification notificationUnit = NotificationHome.loadByUnit( unit );
-		if( notificationUnit == null )
-		{
-			notificationUnit = new Notification( );
-			notificationUnit.setIdUnit( unit.getIdUnit( ) );
-		}
-		notifUnitAtt.setAttribute( notificationUnit );
-		
-		unit.addAttribute( notifUnitAtt );
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void doModifyUnit( Unit unit, HttpServletRequest request )
+    {
+        // the unit in parameter HAS BEEN populate by the request before this call
+        if ( unit.getAttribute( NotificationUnitAttribute.ATTRIBUTE_NAME ) != null )
+        {
+            Notification notif = (Notification) unit.getAttribute( NotificationUnitAttribute.ATTRIBUTE_NAME ).getAttribute( );
+            NotificationHome.mergeConfiguration( notif );
+        }
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void populate( Unit unit, HttpServletRequest request ) throws UnitErrorException
-	{
-		//TODO use to control request and populate unit before dao 
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void doRemoveUnit( int nIdUnit, HttpServletRequest request )
+    {
+        NotificationHome.removeForUnit( nIdUnit );
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public boolean canCreateSubUnit( int nIdUnit )
-	{
-		return true;
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void populate( Unit unit )
+    {
+        if ( unit == null )
+        {
+            return;
+        }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void moveSubTree( Unit unitToMove, Unit newUnitParent )
-	{
-		// NOTHING TO DO, email is linked to the unit no correlation with parent
-	}
+        NotificationUnitAttribute notifUnitAtt = new NotificationUnitAttribute( );
+        Notification notificationUnit = NotificationHome.loadByUnit( unit );
+        if ( notificationUnit == null )
+        {
+            notificationUnit = new Notification( );
+            notificationUnit.setIdUnit( unit.getIdUnit( ) );
+        }
+        notifUnitAtt.setAttribute( notificationUnit );
+
+        unit.addAttribute( notifUnitAtt );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void populate( Unit unit, HttpServletRequest request ) throws UnitErrorException
+    {
+        // use to control request and populate unit before calling dao
+        String strUnitEmail = request.getParameter( MARK_UNIT_EMAIL );
+        String strUnitNotif = request.getParameter( MARK_UNIT_NOTIF );
+
+        if ( StringUtils.isEmpty( strUnitEmail ) && ( NOTIF_BOTH.equals( strUnitNotif ) || NOTIF_EMAIL.equals( strUnitNotif ) ) )
+        {
+            throw new UnitErrorException( MESSAGE_ERROR_EMAIL_MANDATORY );
+        }
+        if ( StringUtils.isNotEmpty( strUnitEmail ) )
+        {
+            EmailValidator validator = EmailValidator.getInstance( );
+            if ( !validator.isValid( strUnitEmail ) )
+            {
+                throw new UnitErrorException( MESSAGE_ERROR_EMAIL_FORMAT );
+            }
+        }
+
+        Notification notif = new Notification( );
+        notif.setIdUnit( unit.getIdUnit( ) );
+        notif.setEmail( strUnitEmail );
+        notif.setHasNotif( !NOTIF_NO.equals( strUnitNotif ) );
+        notif.setUseEmail( NOTIF_EMAIL.equals( strUnitNotif ) || NOTIF_BOTH.equals( strUnitNotif ) );
+        notif.setUseList( NOTIF_LIST.equals( strUnitNotif ) || NOTIF_BOTH.equals( strUnitNotif ) );
+
+        NotificationUnitAttribute notifAttribute = new NotificationUnitAttribute( );
+        notifAttribute.setAttribute( notif );
+        unit.addAttribute( notifAttribute );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean canCreateSubUnit( int nIdUnit )
+    {
+        return true;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void moveSubTree( Unit unitToMove, Unit newUnitParent )
+    {
+        // NOTHING TO DO, email is linked to the unit no correlation with parent
+    }
 
 }

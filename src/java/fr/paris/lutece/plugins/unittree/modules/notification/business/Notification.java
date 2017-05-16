@@ -38,81 +38,95 @@ package fr.paris.lutece.plugins.unittree.modules.notification.business;
  */
 public class Notification
 {
-	private int _nIdUnit;
-	private String _strEmail = "";
-	private boolean _bHasNotif = false;
-	private boolean _bUseEmail = false;
-	private boolean _bUseList = false;
-	/**
-	 * @return the id of the unit
-	 */
-	public int getIdUnit()
-	{
-		return _nIdUnit;
-	}
-	/**
-	 * @param nIdUnit the id of the unit
-	 */
-	public void setIdUnit( int nIdUnit )
-	{
-		this._nIdUnit = nIdUnit;
-	}
-	/**
-	 * @return the set Email
-	 */
-	public String getEmail()
-	{
-		return _strEmail;
-	}
-	/**
-	 * @param strEmail the Email to set
-	 */
-	public void setEmail( String strEmail )
-	{
-		this._strEmail = strEmail;
-	}
-	/**
-	 * @return true if the unit accept notification
-	 */
-	public boolean getHasNotif()
-	{
-		return _bHasNotif;
-	}
-	/**
-	 * @param bHasNotif true if the unit accept notification
-	 */
-	public void setHasNotif( boolean bHasNotif )
-	{
-		this._bHasNotif = bHasNotif;
-	}
-	/**
-	 * @return true if the unit has is own email and use it for notification (email should not be null)
-	 */
-	public boolean getUseEmail()
-	{
-		return _bUseEmail;
-	}
-	/**
-	 * @param bUseEmail true if the unit has is own email and use it for notification (email should not be null)
-	 */
-	public void setUseEmail( boolean bUseEmail )
-	{
-		this._bUseEmail = bUseEmail;
-	}
-	/**
-	 * @return true if the unit use all user email of the unit for notification
-	 */
-	public boolean getUseList()
-	{
-		return _bUseList;
-	}
-	/**
-	 * @param bUseList true if the unit use all user email of the unit for notification
-	 */
-	public void setUseList( boolean bUseList )
-	{
-		this._bUseList = bUseList;
-	}
-	
-	
+    private int _nIdUnit;
+    private String _strEmail = "";
+    private boolean _bHasNotif = false;
+    private boolean _bUseEmail = false;
+    private boolean _bUseList = false;
+
+    /**
+     * @return the id of the unit
+     */
+    public int getIdUnit( )
+    {
+        return _nIdUnit;
+    }
+
+    /**
+     * @param nIdUnit
+     *            the id of the unit
+     */
+    public void setIdUnit( int nIdUnit )
+    {
+        this._nIdUnit = nIdUnit;
+    }
+
+    /**
+     * @return the set Email
+     */
+    public String getEmail( )
+    {
+        return _strEmail;
+    }
+
+    /**
+     * @param strEmail
+     *            the Email to set
+     */
+    public void setEmail( String strEmail )
+    {
+        this._strEmail = strEmail;
+    }
+
+    /**
+     * @return true if the unit accept notification
+     */
+    public boolean getHasNotif( )
+    {
+        return _bHasNotif;
+    }
+
+    /**
+     * @param bHasNotif
+     *            true if the unit accept notification
+     */
+    public void setHasNotif( boolean bHasNotif )
+    {
+        this._bHasNotif = bHasNotif;
+    }
+
+    /**
+     * @return true if the unit has is own email and use it for notification (email should not be null)
+     */
+    public boolean getUseEmail( )
+    {
+        return _bUseEmail;
+    }
+
+    /**
+     * @param bUseEmail
+     *            true if the unit has is own email and use it for notification (email should not be null)
+     */
+    public void setUseEmail( boolean bUseEmail )
+    {
+        this._bUseEmail = bUseEmail;
+    }
+
+    /**
+     * @return true if the unit use all user email of the unit for notification
+     */
+    public boolean getUseList( )
+    {
+        return _bUseList;
+    }
+
+    /**
+     * @param bUseList
+     *            true if the unit use all user email of the unit for notification
+     */
+    public void setUseList( boolean bUseList )
+    {
+        this._bUseList = bUseList;
+    }
+
 }

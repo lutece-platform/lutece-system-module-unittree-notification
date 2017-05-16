@@ -1,11 +1,54 @@
+	<br/>
 	<p>
 		<strong>#i18n{module.unittree.notification.modify.unit.notif.title}</strong>
 	</p>
+	
+	<#if unit?? >
 	<#assign notif=unit.getAttribute('unittree-notification.notificationUnitAttribute').getAttribute()>
-	<p>
-		<span>idUnit : ${notif.idUnit}</span><br/>
-		<span>email : ${notif.email}</span><br/>
-		<span>hasNotif : ${notif.hasNotif?c}</span><br/>
-		<span>useEmail : ${notif.useEmail?c}</span><br/>
-		<span>useList : ${notif.useList?c}</span><br/>
-	</p>
+	<div class="row form-group">
+		<label class="col-xs-12 col-sm-3 control-label" for="label">#i18n{module.unittree.notification.modify.unit.notif.email} : </label>
+		<div class="col-xs-12 col-sm-8">
+			<input class="form-control" value="${notif.email!}" name="unit_email" id="unit_email" type="text" />
+		</div>
+	</div>
+	<div class="row form-group">
+		<div class="col-xs-12">
+			<div>
+				<label class="control-label radio-inline" for="unit_notif_no"><input type="radio" name="unit_notif" id="unit_notif_no" value="no" <#if !notif.hasNotif>checked</#if>/>#i18n{module.unittree.notification.modify.unit.notif.radio.no}</label>			
+			</div>
+			<div>
+				<label class="control-label radio-inline" for="unit_notif_email"><input type="radio" name="unit_notif" id="unit_notif_email" value="email" <#if notif.hasNotif && notif.useEmail && !notif.useList>checked</#if>/>#i18n{module.unittree.notification.modify.unit.notif.radio.email}</label>			
+			</div>
+			<div>
+				<label class="control-label radio-inline" for="unit_notif_list"><input type="radio" name="unit_notif" id="unit_notif_list" value="list" <#if notif.hasNotif && !notif.useEmail && notif.useList>checked</#if>/>#i18n{module.unittree.notification.modify.unit.notif.radio.list}</label>			
+			</div>
+			<div>
+				<label class="control-label radio-inline" for="unit_notif_both"><input type="radio" name="unit_notif" id="unit_notif_both" value="both" <#if notif.hasNotif && notif.useEmail && notif.useList>checked</#if>/>#i18n{module.unittree.notification.modify.unit.notif.radio.both}</label>
+			</div>
+		</div>
+	</div>
+	
+	<#else>
+	<div class="row form-group">
+		<label class="col-xs-12 col-sm-3 control-label" for="label">#i18n{module.unittree.notification.modify.unit.notif.email} : </label>
+		<div class="col-xs-12 col-sm-8">
+			<input class="form-control" value="" name="unit_email" id="unit_email" type="text" />
+		</div>
+	</div>
+	<div class="row form-group">
+		<div class="col-xs-12">
+			<div>
+				<label class="control-label radio-inline" for="unit_notif_no"><input type="radio" name="unit_notif" id="unit_notif_no" value="no" checked />#i18n{module.unittree.notification.modify.unit.notif.radio.no}</label>			
+			</div>
+			<div>
+				<label class="control-label radio-inline" for="unit_notif_email"><input type="radio" name="unit_notif" id="unit_notif_email" value="email" />#i18n{module.unittree.notification.modify.unit.notif.radio.email}</label>			
+			</div>
+			<div>
+				<label class="control-label radio-inline" for="unit_notif_list"><input type="radio" name="unit_notif" id="unit_notif_list" value="list" />#i18n{module.unittree.notification.modify.unit.notif.radio.list}</label>			
+			</div>
+			<div>
+				<label class="control-label radio-inline" for="unit_notif_both"><input type="radio" name="unit_notif" id="unit_notif_both" value="both" />#i18n{module.unittree.notification.modify.unit.notif.radio.both}</label>
+			</div>
+		</div>
+	</div>
+	</#if>
