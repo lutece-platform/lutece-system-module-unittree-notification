@@ -33,6 +33,8 @@
  */
 package fr.paris.lutece.plugins.unittree.modules.notification.service;
 
+import java.util.List;
+
 import fr.paris.lutece.plugins.unittree.service.unit.IUnitAttributeService;
 
 /**
@@ -40,5 +42,12 @@ import fr.paris.lutece.plugins.unittree.service.unit.IUnitAttributeService;
  */
 public interface INotificationService extends IUnitAttributeService
 {
-
+    /**
+     * Get the list of users email for a unit
+     * 
+     * @param nUnitId
+     *            the id unit
+     * @return a List of string
+     */
+    List<String> getUnitUsersEmail( int nUnitId );
 }

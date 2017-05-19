@@ -33,22 +33,33 @@
  */
 package fr.paris.lutece.plugins.unittree.modules.notification.service;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.validator.routines.EmailValidator;
 
+import fr.paris.lutece.plugins.unittree.business.unit.IUnitAttribute;
 import fr.paris.lutece.plugins.unittree.business.unit.Unit;
 import fr.paris.lutece.plugins.unittree.modules.notification.business.Notification;
 import fr.paris.lutece.plugins.unittree.modules.notification.business.NotificationHome;
 import fr.paris.lutece.plugins.unittree.modules.notification.business.NotificationUnitAttribute;
 import fr.paris.lutece.plugins.unittree.service.UnitErrorException;
+import fr.paris.lutece.plugins.unittree.service.unit.IUnitService;
+import fr.paris.lutece.plugins.unittree.service.unit.IUnitUserService;
+import fr.paris.lutece.portal.business.user.AdminUser;
+import fr.paris.lutece.portal.service.spring.SpringContextService;
 
 /**
  *
  */
 public class NotificationService implements INotificationService
 {
+    public static final String BEAN_NAME = "unittree-notification.notificationService";
+
     // Markers
     public static final String MARK_UNIT_NOTIF = "unit_notif";
     public static final String MARK_UNIT_EMAIL = "unit_email";
@@ -62,6 +73,9 @@ public class NotificationService implements INotificationService
     // Message
     private static final String MESSAGE_ERROR_EMAIL_MANDATORY = "module.unittree.notification.message.error.email.mandatory";
     private static final String MESSAGE_ERROR_EMAIL_FORMAT = "module.unittree.notification.message.error.email.format";
+
+    // BEAN
+    private static final String BEAN_UNIT_USER_SERVICE = "unittree.unitUserService";
 
     /**
      * {@inheritDoc}
@@ -178,4 +192,43 @@ public class NotificationService implements INotificationService
         // NOTHING TO DO, email is linked to the unit no correlation with parent
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<String> getUnitUsersEmail( int nUnitId )
+    {
+        IUnitService unitService = SpringContextService.getBean( IUnitService.BEAN_UNIT_SERVICE );
+
+        Unit unit = unitService.getUnit( nUnitId, true );
+
+        List<String> listMail = new ArrayList<String>( );
+        IUnitAttribute<Notification> notifUnitAtt = unit.getAttribute( NotificationUnitAttribute.ATTRIBUTE_NAME );
+
+        if ( notifUnitAtt != null )
+        {
+            Notification notification = notifUnitAtt.getAttribute( );
+
+            if ( notification != null && notification.getHasNotif( ) )
+            {
+                if ( notification.getUseEmail( ) )
+                {
+                    listMail.add( notification.getEmail( ) );
+                }
+
+                if ( notification.getUseList( ) )
+                {
+                    IUnitUserService _unitUserService = SpringContextService.getBean( BEAN_UNIT_USER_SERVICE );
+                    List<AdminUser> listUsers = _unitUserService.getUsers( notification.getIdUnit( ), new HashMap<String, Unit>( ), false );
+
+                    for ( AdminUser adminUser : listUsers )
+                    {
+                        listMail.add( adminUser.getEmail( ) );
+                    }
+                }
+            }
+        }
+
+        return listMail;
+    }
 }
