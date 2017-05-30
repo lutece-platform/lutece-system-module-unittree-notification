@@ -49,7 +49,7 @@
 
     <properties>
         <componentName>unittree-notification</componentName>
-        <jiraProjectName>UNITNOTIF</jiraProjectName>
+        <jiraProjectName>UNITTNOTIF</jiraProjectName>
         <jiraComponentId>13688</jiraComponentId>
     </properties>
 
