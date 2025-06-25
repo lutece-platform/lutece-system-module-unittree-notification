@@ -35,7 +35,9 @@ package fr.paris.lutece.plugins.unittree.modules.notification.web;
 
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Named;
+import jakarta.servlet.http.HttpServletRequest;
 
 import fr.paris.lutece.plugins.unittree.web.unit.IUnitAttributeComponent;
 import fr.paris.lutece.portal.business.user.AdminUser;
@@ -43,9 +45,12 @@ import fr.paris.lutece.portal.business.user.AdminUser;
 /**
  *
  */
+@ApplicationScoped
+@Named( "unittree-notification.notificationUnitAttributeComponent" )
 public class NotificationUnitAttributreComponent implements IUnitAttributeComponent
 {
-    private static final String NAME = "Unit notification";
+	
+	private static final String NAME = "Unit notification";
 
     // TEMPLATES
     private static final String TEMPLATE_ATTRIBUTE_COMPONENT = "modules/notification/notification_unit_attribute.html";

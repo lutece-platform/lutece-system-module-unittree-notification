@@ -35,9 +35,14 @@ package fr.paris.lutece.plugins.unittree.modules.notification.business;
 
 import fr.paris.lutece.plugins.unittree.business.unit.AbstractUnitAttribute;
 
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Named;
+
 /**
  *
  */
+@ApplicationScoped
+@Named( "unittree-notification.notificationUnitAttributeService" )
 public class NotificationUnitAttribute extends AbstractUnitAttribute<Notification>
 {
     public static final String ATTRIBUTE_NAME = "unittree-notification.notificationUnitAttribute";

@@ -37,9 +37,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+import jakarta.servlet.http.HttpServletRequest;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.validator.routines.EmailValidator;
 
 import fr.paris.lutece.plugins.unittree.business.unit.IUnitAttribute;
@@ -51,11 +54,12 @@ import fr.paris.lutece.plugins.unittree.service.UnitErrorException;
 import fr.paris.lutece.plugins.unittree.service.unit.IUnitService;
 import fr.paris.lutece.plugins.unittree.service.unit.IUnitUserService;
 import fr.paris.lutece.portal.business.user.AdminUser;
-import fr.paris.lutece.portal.service.spring.SpringContextService;
 
 /**
  *
  */
+@ApplicationScoped
+@Named( NotificationService.BEAN_NAME )
 public class NotificationService implements INotificationService
 {
     public static final String BEAN_NAME = "unittree-notification.notificationService";
@@ -73,9 +77,12 @@ public class NotificationService implements INotificationService
     // Message
     private static final String MESSAGE_ERROR_EMAIL_MANDATORY = "module.unittree.notification.message.error.email.mandatory";
     private static final String MESSAGE_ERROR_EMAIL_FORMAT = "module.unittree.notification.message.error.email.format";
-
-    // BEAN
-    private static final String BEAN_UNIT_USER_SERVICE = "unittree.unitUserService";
+    
+    @Inject
+    private IUnitService _unitService;
+    
+    @Inject
+    private IUnitUserService _unitUserService;
 
     /**
      * {@inheritDoc}
@@ -198,9 +205,7 @@ public class NotificationService implements INotificationService
     @Override
     public List<String> getUnitUsersEmail( int nUnitId )
     {
-        IUnitService unitService = SpringContextService.getBean( IUnitService.BEAN_UNIT_SERVICE );
-
-        Unit unit = unitService.getUnit( nUnitId, true );
+        Unit unit = _unitService.getUnit( nUnitId, true );
 
         List<String> listMail = new ArrayList<String>( );
         IUnitAttribute<Notification> notifUnitAtt = unit.getAttribute( NotificationUnitAttribute.ATTRIBUTE_NAME );
@@ -218,7 +223,6 @@ public class NotificationService implements INotificationService
 
                 if ( notification.getUseList( ) )
                 {
-                    IUnitUserService _unitUserService = SpringContextService.getBean( BEAN_UNIT_USER_SERVICE );
                     List<AdminUser> listUsers = _unitUserService.getUsers( notification.getIdUnit( ), new HashMap<String, Unit>( ), false );
 
                     for ( AdminUser adminUser : listUsers )
