@@ -37,7 +37,7 @@ import fr.paris.lutece.plugins.unittree.business.unit.Unit;
 import fr.paris.lutece.plugins.unittree.modules.notification.service.UnitTreeNotificationPlugin;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
-import fr.paris.lutece.portal.service.spring.SpringContextService;
+import jakarta.enterprise.inject.spi.CDI;
 
 /**
  *
@@ -45,7 +45,7 @@ import fr.paris.lutece.portal.service.spring.SpringContextService;
 public final class NotificationHome
 {
     private static Plugin _plugin = PluginService.getPlugin( UnitTreeNotificationPlugin.PLUGIN_NAME );
-    private static INotificationDAO _dao = SpringContextService.getBean( INotificationDAO.BEAN_NAME );
+    private static INotificationDAO _dao = CDI.current( ).select( INotificationDAO.class ).get( ); 
 
     /**
      * Private constructor
