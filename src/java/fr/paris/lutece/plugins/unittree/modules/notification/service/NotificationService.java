@@ -39,7 +39,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.validator.routines.EmailValidator;
 
 import fr.paris.lutece.plugins.unittree.business.unit.IUnitAttribute;
@@ -50,6 +50,7 @@ import fr.paris.lutece.plugins.unittree.modules.notification.business.Notificati
 import fr.paris.lutece.plugins.unittree.service.UnitErrorException;
 import fr.paris.lutece.plugins.unittree.service.unit.IUnitService;
 import fr.paris.lutece.plugins.unittree.service.unit.IUnitUserService;
+import fr.paris.lutece.plugins.unittree.service.unit.UnitService;
 import fr.paris.lutece.portal.business.user.AdminUser;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 
@@ -198,7 +199,7 @@ public class NotificationService implements INotificationService
     @Override
     public List<String> getUnitUsersEmail( int nUnitId )
     {
-        IUnitService unitService = SpringContextService.getBean( IUnitService.BEAN_UNIT_SERVICE );
+        IUnitService unitService = SpringContextService.getBean( UnitService.BEAN_UNIT_SERVICE );
 
         Unit unit = unitService.getUnit( nUnitId, true );
 
