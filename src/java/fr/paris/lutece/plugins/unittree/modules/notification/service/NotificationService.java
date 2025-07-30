@@ -36,6 +36,7 @@ package fr.paris.lutece.plugins.unittree.modules.notification.service;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -43,7 +44,6 @@ import jakarta.inject.Named;
 import jakarta.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.validator.routines.EmailValidator;
 
 import fr.paris.lutece.plugins.unittree.business.unit.IUnitAttribute;
 import fr.paris.lutece.plugins.unittree.business.unit.Unit;
@@ -77,6 +77,9 @@ public class NotificationService implements INotificationService
     // Message
     private static final String MESSAGE_ERROR_EMAIL_MANDATORY = "module.unittree.notification.message.error.email.mandatory";
     private static final String MESSAGE_ERROR_EMAIL_FORMAT = "module.unittree.notification.message.error.email.format";
+    
+    // Email pattern
+    private static final String CONSTANT_EMAIL = "(^([a-zA-Z0-9]+(([\\.\\-\\_]?[a-zA-Z0-9]+)+)?)\\@(([a-zA-Z0-9]+[\\.\\-\\_])+[a-zA-Z]{2,4})$)|(^$)";
     
     @Inject
     private IUnitService _unitService;
@@ -162,8 +165,7 @@ public class NotificationService implements INotificationService
         }
         if ( StringUtils.isNotEmpty( strUnitEmail ) )
         {
-            EmailValidator validator = EmailValidator.getInstance( );
-            if ( !validator.isValid( strUnitEmail ) )
+            if ( !isValidEmail( strUnitEmail ) )
             {
                 throw new UnitErrorException( MESSAGE_ERROR_EMAIL_FORMAT );
             }
@@ -181,6 +183,18 @@ public class NotificationService implements INotificationService
         unit.addAttribute( notifAttribute );
     }
 
+    /**
+     * Checks if the string in parameter is a valid email address
+     * 
+     * @param strEmail
+     *            The email address to check
+     * @return true if strEmail is a valid email address, false otherwise
+     */
+    private boolean isValidEmail( String strEmail )
+    {
+    	return Pattern.matches( CONSTANT_EMAIL, strEmail );
+    }
+    
     /**
      * {@inheritDoc}
      */
