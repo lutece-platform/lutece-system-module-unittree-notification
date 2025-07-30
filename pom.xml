@@ -39,12 +39,6 @@
             <version>[2.1.2,)</version>
             <type>lutece-plugin</type>
         </dependency>
-        <dependency>
-            <groupId>commons-validator</groupId>
-            <artifactId>commons-validator</artifactId>
-            <version>1.4.0</version>
-            <type>jar</type>
-        </dependency>
     </dependencies>
 
     <properties>
