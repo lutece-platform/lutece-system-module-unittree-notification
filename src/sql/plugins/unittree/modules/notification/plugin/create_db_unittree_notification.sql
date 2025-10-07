@@ -1,6 +1,6 @@
---liquibase formatted sql
---changeset unittree-notification:create_db_unittree_notification.sql
---preconditions onFail:MARK_RAN onError:WARN
+-- liquibase formatted sql
+-- changeset unittree-notification:create_db_unittree_notification.sql
+-- preconditions onFail:MARK_RAN onError:WARN
 /*DROP TABLE IF EXISTS unittree_notification */
 DROP TABLE IF EXISTS unittree_unit_notification;
 
