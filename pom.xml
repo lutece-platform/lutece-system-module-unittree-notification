@@ -10,7 +10,7 @@
     <groupId>fr.paris.lutece.plugins</groupId>
     <artifactId>module-unittree-notification</artifactId>
     <packaging>lutece-plugin</packaging>
-    <version>1.0.2-SNAPSHOT</version>
+    <version>1.0.2-beta-01</version>
     <name>Lutece Unit Tree Notification module</name>
 
     <repositories>
@@ -57,7 +57,7 @@
         <connection>scm:git:https://github.com/lutece-platform/lutece-system-module-unittree-notification.git</connection>
         <developerConnection>scm:git:https://github.com/lutece-platform/lutece-system-module-unittree-notification.git</developerConnection>
         <url>https://github.com/lutece-platform/lutece-system-module-unittree-notification.git</url>
-        <tag>HEAD</tag>
+        <tag>module-unittree-notification-1.0.2-beta-01</tag>
     </scm>
     
 </project>
