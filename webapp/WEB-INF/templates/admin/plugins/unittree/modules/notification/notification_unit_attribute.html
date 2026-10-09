@@ -13,7 +13,7 @@
 	<#assign notifBoth = false />
 </#if>
 <@fieldSet legend='#i18n{module.unittree.notification.modify.unit.notif.title}' legendClass='h4'>
-	<@formGroup labelFor='unit_email' labelKey='#i18n{module.unittree.notification.modify.unit.notif.email}'>
+	<@formGroup labelFor='unit_email' labelKey='#i18n{module.unittree.notification.modify.unit.notif.email}' helpKey='#i18n{module.unittree.notification.modify.unit.notif.email.help} ${mail_list_separator!}'>
 		<@input type='text' name='unit_email' id='unit_email' value=notifEmail />
 	</@formGroup>
 	<@fieldSet legend='#i18n{module.unittree.notification.modify.unit.notif.legend}' hideLegend=['all']>
