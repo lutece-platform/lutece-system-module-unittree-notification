@@ -73,13 +73,16 @@ public class NotificationService implements INotificationService
     private static final String NOTIF_EMAIL = "email";
     private static final String NOTIF_LIST = "list";
     private static final String NOTIF_BOTH = "both";
+    public static final int EMAIL_MAX_LENGTH = 1000;
 
     // Message
     private static final String MESSAGE_ERROR_EMAIL_MANDATORY = "module.unittree.notification.message.error.email.mandatory";
     private static final String MESSAGE_ERROR_EMAIL_FORMAT = "module.unittree.notification.message.error.email.format";
+    private static final String MESSAGE_ERROR_EMAIL_LENGTH = "module.unittree.notification.message.error.email.length";
     
     // Email pattern
-    private static final String CONSTANT_EMAIL = "(^([a-zA-Z0-9]+(([\\.\\-\\_]?[a-zA-Z0-9]+)+)?)\\@(([a-zA-Z0-9]+[\\.\\-\\_])+[a-zA-Z]{2,4})$)|(^$)";
+    private static final String EMAIL = "[a-zA-Z0-9]+([\\.\\-\\_][a-zA-Z0-9]+)*\\@([a-zA-Z0-9]+[\\.\\-\\_])+[a-zA-Z]{2,4}";
+    private static final String CONSTANT_EMAIL = EMAIL + "(;" + EMAIL + ")*";
     
     @Inject
     private IUnitService _unitService;
@@ -156,7 +159,7 @@ public class NotificationService implements INotificationService
     public void populate( Unit unit, HttpServletRequest request ) throws UnitErrorException
     {
         // use to control request and populate unit before calling dao
-        String strUnitEmail = request.getParameter( MARK_UNIT_EMAIL );
+        String strUnitEmail = StringUtils.deleteWhitespace( request.getParameter( MARK_UNIT_EMAIL ) );
         String strUnitNotif = request.getParameter( MARK_UNIT_NOTIF );
 
         if ( StringUtils.isEmpty( strUnitEmail ) && ( NOTIF_BOTH.equals( strUnitNotif ) || NOTIF_EMAIL.equals( strUnitNotif ) ) )
@@ -165,6 +168,10 @@ public class NotificationService implements INotificationService
         }
         if ( StringUtils.isNotEmpty( strUnitEmail ) )
         {
+            if ( strUnitEmail.length( ) > EMAIL_MAX_LENGTH )
+            {
+                throw new UnitErrorException( MESSAGE_ERROR_EMAIL_LENGTH );
+            }
             if ( !isValidEmail( strUnitEmail ) )
             {
                 throw new UnitErrorException( MESSAGE_ERROR_EMAIL_FORMAT );
