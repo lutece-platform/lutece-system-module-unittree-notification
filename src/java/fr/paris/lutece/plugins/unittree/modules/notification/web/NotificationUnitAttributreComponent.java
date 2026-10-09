@@ -39,6 +39,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Named;
 import jakarta.servlet.http.HttpServletRequest;
 
+import fr.paris.lutece.plugins.unittree.modules.notification.service.NotificationService;
 import fr.paris.lutece.plugins.unittree.web.unit.IUnitAttributeComponent;
 import fr.paris.lutece.portal.business.user.AdminUser;
 
@@ -52,6 +53,9 @@ public class NotificationUnitAttributreComponent implements IUnitAttributeCompon
 	
 	private static final String NAME = "Unit notification";
 
+    // MARKS
+    private static final String MARK_MAIL_LIST_SEPARATOR = "mail_list_separator";
+
     // TEMPLATES
     private static final String TEMPLATE_ATTRIBUTE_COMPONENT = "modules/notification/notification_unit_attribute.html";
 
@@ -61,7 +65,8 @@ public class NotificationUnitAttributreComponent implements IUnitAttributeCompon
     @Override
     public void fillModel( HttpServletRequest request, AdminUser user, Map<String, Object> model )
     {
-        // NOTHING TO DO, the model already have the unit with NotificationUnitAttribute
+        // the model already have the unit with NotificationUnitAttribute
+        model.put( MARK_MAIL_LIST_SEPARATOR, NotificationService.getMailListSeparator( ) );
     }
 
     /**
