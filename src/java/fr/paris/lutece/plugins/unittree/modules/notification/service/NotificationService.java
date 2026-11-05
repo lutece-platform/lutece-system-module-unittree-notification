@@ -34,6 +34,7 @@
 package fr.paris.lutece.plugins.unittree.modules.notification.service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -54,6 +55,8 @@ import fr.paris.lutece.plugins.unittree.service.UnitErrorException;
 import fr.paris.lutece.plugins.unittree.service.unit.IUnitService;
 import fr.paris.lutece.plugins.unittree.service.unit.IUnitUserService;
 import fr.paris.lutece.portal.business.user.AdminUser;
+import fr.paris.lutece.portal.service.admin.AdminUserService;
+import fr.paris.lutece.portal.service.util.AppPropertiesService;
 
 /**
  *
@@ -73,13 +76,16 @@ public class NotificationService implements INotificationService
     private static final String NOTIF_EMAIL = "email";
     private static final String NOTIF_LIST = "list";
     private static final String NOTIF_BOTH = "both";
+    public static final int EMAIL_MAX_LENGTH = 1000;
+
+    // Properties
+    public static final String PROPERTY_MAIL_LIST_SEPARATOR = "mail.list.separator";
+    public static final String DEFAULT_MAIL_LIST_SEPARATOR = ";";
 
     // Message
     private static final String MESSAGE_ERROR_EMAIL_MANDATORY = "module.unittree.notification.message.error.email.mandatory";
     private static final String MESSAGE_ERROR_EMAIL_FORMAT = "module.unittree.notification.message.error.email.format";
-    
-    // Email pattern
-    private static final String CONSTANT_EMAIL = "(^([a-zA-Z0-9]+(([\\.\\-\\_]?[a-zA-Z0-9]+)+)?)\\@(([a-zA-Z0-9]+[\\.\\-\\_])+[a-zA-Z]{2,4})$)|(^$)";
+    private static final String MESSAGE_ERROR_EMAIL_LENGTH = "module.unittree.notification.message.error.email.length";
     
     @Inject
     private IUnitService _unitService;
@@ -156,7 +162,7 @@ public class NotificationService implements INotificationService
     public void populate( Unit unit, HttpServletRequest request ) throws UnitErrorException
     {
         // use to control request and populate unit before calling dao
-        String strUnitEmail = request.getParameter( MARK_UNIT_EMAIL );
+        String strUnitEmail = StringUtils.deleteWhitespace( request.getParameter( MARK_UNIT_EMAIL ) );
         String strUnitNotif = request.getParameter( MARK_UNIT_NOTIF );
 
         if ( StringUtils.isEmpty( strUnitEmail ) && ( NOTIF_BOTH.equals( strUnitNotif ) || NOTIF_EMAIL.equals( strUnitNotif ) ) )
@@ -165,7 +171,11 @@ public class NotificationService implements INotificationService
         }
         if ( StringUtils.isNotEmpty( strUnitEmail ) )
         {
-            if ( !isValidEmail( strUnitEmail ) )
+            if ( strUnitEmail.length( ) > EMAIL_MAX_LENGTH )
+            {
+                throw new UnitErrorException( MESSAGE_ERROR_EMAIL_LENGTH );
+            }
+            if ( !Arrays.stream( strUnitEmail.split( Pattern.quote( getMailListSeparator( ) ), -1 ) ).allMatch( AdminUserService::checkEmail ) )
             {
                 throw new UnitErrorException( MESSAGE_ERROR_EMAIL_FORMAT );
             }
@@ -184,15 +194,13 @@ public class NotificationService implements INotificationService
     }
 
     /**
-     * Checks if the string in parameter is a valid email address
+     * Gets the separator of the unit emails, from the core property mail.list.separator
      * 
-     * @param strEmail
-     *            The email address to check
-     * @return true if strEmail is a valid email address, false otherwise
+     * @return the separator
      */
-    private boolean isValidEmail( String strEmail )
+    public static String getMailListSeparator( )
     {
-    	return Pattern.matches( CONSTANT_EMAIL, strEmail );
+        return AppPropertiesService.getProperty( PROPERTY_MAIL_LIST_SEPARATOR, DEFAULT_MAIL_LIST_SEPARATOR );
     }
     
     /**
@@ -230,9 +238,9 @@ public class NotificationService implements INotificationService
 
             if ( notification != null && notification.getHasNotif( ) )
             {
-                if ( notification.getUseEmail( ) )
+                if ( notification.getUseEmail( ) && StringUtils.isNotEmpty( notification.getEmail( ) ) )
                 {
-                    listMail.add( notification.getEmail( ) );
+                    listMail.addAll( Arrays.asList( StringUtils.split( notification.getEmail( ), getMailListSeparator( ) ) ) );
                 }
 
                 if ( notification.getUseList( ) )
